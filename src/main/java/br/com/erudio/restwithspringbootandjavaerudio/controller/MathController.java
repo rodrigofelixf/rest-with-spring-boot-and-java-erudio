@@ -1,17 +1,16 @@
 package br.com.erudio.restwithspringbootandjavaerudio.controller;
 
 
-import br.com.erudio.restwithspringbootandjavaerudio.exceptions.UnsupportedMathOperationException;
 import br.com.erudio.restwithspringbootandjavaerudio.service.MathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class MathController {
 
-    private final AtomicLong counter = new AtomicLong();
+
+
 
     @Autowired
     MathService mathService;

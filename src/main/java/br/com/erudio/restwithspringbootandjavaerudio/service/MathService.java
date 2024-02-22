@@ -2,7 +2,7 @@ package br.com.erudio.restwithspringbootandjavaerudio.service;
 
 import br.com.erudio.restwithspringbootandjavaerudio.exceptions.UnsupportedMathOperationException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @Service
