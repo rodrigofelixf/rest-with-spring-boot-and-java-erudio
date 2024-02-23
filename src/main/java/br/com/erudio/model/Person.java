@@ -1,15 +1,30 @@
-package br.com.erudio.restwithspringbootandjavaerudio.model;
+package br.com.erudio.model;
 
-import java.io.Serializable;
 
-public class Person implements Serializable {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public class Person {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
     private String firstName;
+
+
     private String lastName;
+
+
     private String address;
+
+
     private String gender;
 
     public Person() {}

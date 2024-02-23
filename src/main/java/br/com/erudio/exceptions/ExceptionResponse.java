@@ -1,8 +1,7 @@
-package br.com.erudio.restwithspringbootandjavaerudio.exceptions;
+package br.com.erudio.exceptions;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class ExceptionResponse implements Serializable {
 

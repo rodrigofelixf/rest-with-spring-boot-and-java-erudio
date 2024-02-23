@@ -1,9 +1,11 @@
-package br.com.erudio.restwithspringbootandjavaerudio.controller;
+package br.com.erudio.controller;
 
-import br.com.erudio.restwithspringbootandjavaerudio.model.Person;
-import br.com.erudio.restwithspringbootandjavaerudio.service.PersonService;
+import br.com.erudio.model.Person;
+import br.com.erudio.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class PersonController {
 
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value = "id") String id) {
+    public Person findById(@PathVariable(value = "id") Long id) {
         return personService.findById(id);
     }
 
@@ -39,7 +41,8 @@ public class PersonController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable(value = "id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
         personService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
