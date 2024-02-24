@@ -4,6 +4,7 @@ import br.com.erudio.model.Person;
 import br.com.erudio.requests.PersonGetRequestBody;
 import br.com.erudio.requests.PersonPostRequestBody;
 import br.com.erudio.requests.PersonPutRequestBody;
+import br.com.erudio.requests.v2.PersonPostRequestBodyV2;
 import br.com.erudio.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,15 @@ public class PersonController {
     }
 
     @PostMapping
-    public ResponseEntity<Person> create(@RequestBody PersonPostRequestBody personPostRequestBody) {
+    public ResponseEntity<PersonPostRequestBody> create(@RequestBody PersonPostRequestBody personPostRequestBody) {
         return new ResponseEntity<>(personService.create(personPostRequestBody), HttpStatus.CREATED);
     }
+    @PostMapping(path = "/v2")
+    public ResponseEntity<PersonPostRequestBodyV2> createV2(@RequestBody PersonPostRequestBodyV2 personPostRequestBody) {
+        return new ResponseEntity<>(personService.createV2(personPostRequestBody), HttpStatus.CREATED);
+    }
+
+
 
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody PersonPutRequestBody personPutRequestBody) {

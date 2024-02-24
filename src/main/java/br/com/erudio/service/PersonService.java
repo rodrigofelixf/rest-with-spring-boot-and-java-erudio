@@ -7,6 +7,7 @@ import br.com.erudio.repository.PersonRepository;
 import br.com.erudio.requests.PersonGetRequestBody;
 import br.com.erudio.requests.PersonPostRequestBody;
 import br.com.erudio.requests.PersonPutRequestBody;
+import br.com.erudio.requests.v2.PersonPostRequestBodyV2;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -40,9 +41,19 @@ public class PersonService {
     }
 
     @Transactional
-    public Person create(PersonPostRequestBody personPostRequestBody) {
-        Person toPerson = PersonMapper.INSTANCE.toPerson(personPostRequestBody);
-        return personRepository.save(toPerson);
+    public PersonPostRequestBody create(PersonPostRequestBody personPostRequestBody) {
+        Person person = PersonMapper.INSTANCE.toPerson(personPostRequestBody);
+        personRepository.save(person);
+
+        return personMapper.toPersonPostRequestBody(person);
+    }
+
+    @Transactional
+    public PersonPostRequestBodyV2 createV2(PersonPostRequestBodyV2 personPostRequestBody) {
+        Person person = PersonMapper.INSTANCE.toPerson(personPostRequestBody);
+        personRepository.save(person);
+
+        return personMapper.toPersonPostRequestBodyV2(person);
     }
 
     public void update(PersonPutRequestBody personPutRequestBody) {
