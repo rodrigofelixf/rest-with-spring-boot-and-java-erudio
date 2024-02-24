@@ -1,8 +1,11 @@
 package br.com.erudio.controller;
 
 import br.com.erudio.model.Person;
+import br.com.erudio.requests.PersonGetRequestBody;
+import br.com.erudio.requests.PersonPostRequestBody;
+import br.com.erudio.requests.PersonPutRequestBody;
 import br.com.erudio.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,31 +16,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/person")
+@RequiredArgsConstructor
 public class PersonController {
 
-    @Autowired
-    private PersonService personService;
-
+    private final PersonService personService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findAll(){
-        return personService.findAll();
+    public ResponseEntity<List<PersonGetRequestBody>> findAll(){
+        return ResponseEntity.ok(personService.findAll());
     }
 
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value = "id") Long id) {
-        return personService.findById(id);
+    public ResponseEntity<PersonGetRequestBody> findById(@PathVariable(value = "id") Long id) {
+        return ResponseEntity.ok(personService.findById(id));
     }
 
     @PostMapping
-    public Person create(@RequestBody Person person) {
-        return personService.create(person);
+    public ResponseEntity<Person> create(@RequestBody PersonPostRequestBody personPostRequestBody) {
+        return new ResponseEntity<>(personService.create(personPostRequestBody), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public Person update(@RequestBody Person person) {
-        return personService.update(person);
+    public ResponseEntity<Void> update(@RequestBody PersonPutRequestBody personPutRequestBody) {
+        personService.update(personPutRequestBody);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/{id}")
