@@ -4,9 +4,8 @@ import br.com.erudio.exceptions.ResourceNotFoundException;
 import br.com.erudio.mapper.PersonMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repository.PersonRepository;
-import br.com.erudio.requests.PersonGetRequestBody;
-import br.com.erudio.requests.PersonPostRequestBody;
-import br.com.erudio.requests.PersonPutRequestBody;
+import br.com.erudio.requests.v1.PersonResponseBody;
+import br.com.erudio.requests.v1.PersonRequestBody;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -26,37 +25,39 @@ public class PersonService {
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
 
-    public List<PersonGetRequestBody> findAll() {
+    public List<PersonResponseBody> findAll() {
         List<Person> personList = personRepository.findAll();
-        return personMapper.toPersonGetRequestBodyList(personList);
+        return personMapper.toPersonResponseBodyList(personList);
     }
 
 
-    public PersonGetRequestBody findById(Long id) {
+    public PersonResponseBody findById(Long id) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-        return personMapper.toPersonGetRequestBody(person);
+        return personMapper.toPersonResponseBody(person);
     }
 
     @Transactional
-    public Person create(PersonPostRequestBody personPostRequestBody) {
-        Person toPerson = PersonMapper.INSTANCE.toPerson(personPostRequestBody);
-        return personRepository.save(toPerson);
+    public PersonResponseBody create(PersonRequestBody personRequestBody) {
+        Person person = personMapper.toPerson(personRequestBody);
+        personRepository.save(person);
+
+        return personMapper.toPersonResponseBody(person);
     }
 
-    public void update(PersonPutRequestBody personPutRequestBody) {
-        Person savedPerson = personRepository.findById(personPutRequestBody.getId())
+    public void update(PersonResponseBody personResponseBody) {
+        Person savedPerson = personRepository.findById(personResponseBody.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        Person person = PersonMapper.INSTANCE.toPerson(personPutRequestBody);
+        Person person = PersonMapper.INSTANCE.toPerson(personResponseBody);
         person.setId(savedPerson.getId());
         personRepository.save(person);
     }
 
     public void delete(Long id) {
-        var entity = personRepository.findById(id)
+        Person person= personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        personRepository.delete(entity);
+        personRepository.delete(person);
 
     }
 

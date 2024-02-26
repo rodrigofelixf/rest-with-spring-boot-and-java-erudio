@@ -1,14 +1,15 @@
-package br.com.erudio.requests;
+package br.com.erudio.requests.v1;
 
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+
+
 @Builder
-public class PersonPostRequestBody {
+@Data
+public class PersonResponseBody {
+    private Long id;
 
     private String firstName;
 

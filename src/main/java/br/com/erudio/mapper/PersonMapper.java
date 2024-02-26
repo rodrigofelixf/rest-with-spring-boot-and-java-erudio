@@ -1,9 +1,8 @@
 package br.com.erudio.mapper;
 
 import br.com.erudio.model.Person;
-import br.com.erudio.requests.PersonGetRequestBody;
-import br.com.erudio.requests.PersonPostRequestBody;
-import br.com.erudio.requests.PersonPutRequestBody;
+import br.com.erudio.requests.v1.PersonResponseBody;
+import br.com.erudio.requests.v1.PersonRequestBody;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -14,9 +13,12 @@ import java.util.List;
 public interface PersonMapper {
    PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
-    Person toPerson(PersonPostRequestBody personPostRequestBody);
-    Person toPerson(PersonPutRequestBody personPutRequestBody);
+    PersonRequestBody toPersonRequestBody(Person person);
+    PersonResponseBody toPersonResponseBody(Person person);
 
-    List<PersonGetRequestBody> toPersonGetRequestBodyList(List<Person> personList);
-    PersonGetRequestBody toPersonGetRequestBody(Person person);
+    Person toPerson(PersonRequestBody personRequestBody);
+    Person toPerson(PersonResponseBody personResponseBody);
+
+    List<PersonResponseBody> toPersonResponseBodyList(List<Person> personList);
+
 }
