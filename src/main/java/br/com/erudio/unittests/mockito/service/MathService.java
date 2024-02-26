@@ -1,4 +1,4 @@
-package br.com.erudio.service;
+package br.com.erudio.unittests.mockito.service;
 
 import br.com.erudio.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

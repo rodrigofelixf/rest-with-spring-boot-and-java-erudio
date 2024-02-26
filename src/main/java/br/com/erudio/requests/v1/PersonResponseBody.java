@@ -1,15 +1,23 @@
 package br.com.erudio.requests.v1;
 
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 
-
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @Data
-public class PersonResponseBody {
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
+public class PersonResponseBody extends RepresentationModel<PersonResponseBody> {
+
+
+    @JsonProperty("id")
+    private Long key;
 
     private String firstName;
 

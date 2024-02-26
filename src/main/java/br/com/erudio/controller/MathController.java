@@ -1,7 +1,7 @@
 package br.com.erudio.controller;
 
 
-import br.com.erudio.service.MathService;
+import br.com.erudio.unittests.mockito.service.MathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
