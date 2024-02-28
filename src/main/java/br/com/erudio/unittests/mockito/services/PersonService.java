@@ -1,12 +1,13 @@
-package br.com.erudio.unittests.mockito.service;
+package br.com.erudio.unittests.mockito.services;
 
+import br.com.erudio.controller.BookController;
 import br.com.erudio.controller.PersonController;
 import br.com.erudio.exceptions.ResourceNotFoundException;
-import br.com.erudio.mapper.PersonMapper;
+import br.com.erudio.mapper.ErudioMapper;
 import br.com.erudio.model.Person;
-import br.com.erudio.repository.PersonRepository;
-import br.com.erudio.requests.v1.PersonResponseBody;
-import br.com.erudio.requests.v1.PersonRequestBody;
+import br.com.erudio.repositories.PersonRepository;
+import br.com.erudio.requests.v1.responses.PersonResponseBody;
+import br.com.erudio.requests.v1.requests.PersonRequestBody;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final PersonMapper personMapper;
+    private final ErudioMapper erudioMapper;
 
 
     private Logger logger = Logger.getLogger(PersonService.class.getName());
@@ -31,7 +32,7 @@ public class PersonService {
 
     public List<PersonResponseBody> findAll() {
         List<Person> personList = personRepository.findAll();
-        List<PersonResponseBody> personResponseBodyList = personMapper.toPersonResponseBodyList(personList);
+        List<PersonResponseBody> personResponseBodyList = erudioMapper.toPersonResponseBodyList(personList);
         personResponseBodyList.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 
         return personResponseBodyList;
@@ -41,7 +42,7 @@ public class PersonService {
     public PersonResponseBody findById(Long id) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        PersonResponseBody personResponse = personMapper.toPersonResponseBody(person);
+        PersonResponseBody personResponse = erudioMapper.toPersonResponseBody(person);
         personResponse.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
 
         return personResponse;
@@ -49,9 +50,9 @@ public class PersonService {
 
     @Transactional
     public PersonResponseBody create(PersonRequestBody personRequestBody) {
-        Person person = personMapper.toPerson(personRequestBody);
+        Person person = erudioMapper.toPerson(personRequestBody);
         personRepository.save(person);
-        PersonResponseBody personResponse = personMapper.toPersonResponseBody(person);
+        PersonResponseBody personResponse = erudioMapper.toPersonResponseBody(person);
         personResponse.add(linkTo(methodOn(PersonController.class).findById(personResponse.getKey())).withSelfRel());
 
         return personResponse;
@@ -60,10 +61,10 @@ public class PersonService {
     public PersonResponseBody update(PersonResponseBody personResponseBody) {
         Person savedPerson = personRepository.findById(personResponseBody.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        Person person = personMapper.toPerson(personResponseBody);
+        Person person = erudioMapper.toPerson(personResponseBody);
         person.setId(savedPerson.getId());
         personRepository.save(person);
-        PersonResponseBody personResponse = personMapper.toPersonResponseBody(person);
+        PersonResponseBody personResponse = erudioMapper.toPersonResponseBody(person);
         personResponse.add(linkTo(methodOn(PersonController.class).findById(personResponse.getKey())).withSelfRel());
 
         return personResponse;

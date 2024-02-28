@@ -1,7 +1,7 @@
 package br.com.erudio.mocks;
 
 import br.com.erudio.model.Person;
-import br.com.erudio.requests.v1.PersonResponseBody;
+import br.com.erudio.requests.v1.responses.PersonResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;

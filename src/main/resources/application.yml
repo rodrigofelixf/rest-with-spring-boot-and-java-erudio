@@ -3,19 +3,25 @@ server:
     include-stacktrace: on_param
 
 spring:
+  flyway:
+    locations: src/main/resources/db/migration
   datasource:
-    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?useTimezone=true&serverTimezone=UTC
     username: root
     password: root
   jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
-
 
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
+springdoc:
+  pathsToMatch: /api/**/v1/**
+  swagger-ui:
+    use-root-path: true

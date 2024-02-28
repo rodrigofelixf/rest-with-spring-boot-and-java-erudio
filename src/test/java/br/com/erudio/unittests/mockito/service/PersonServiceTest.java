@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import br.com.erudio.mocks.MockPerson;
 import br.com.erudio.model.Person;
-import br.com.erudio.repository.PersonRepository;
+import br.com.erudio.repositories.PersonRepository;
+import br.com.erudio.unittests.mockito.services.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

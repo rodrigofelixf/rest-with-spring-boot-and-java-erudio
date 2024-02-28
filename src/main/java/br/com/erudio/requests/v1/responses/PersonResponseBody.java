@@ -1,4 +1,4 @@
-package br.com.erudio.requests.v1;
+package br.com.erudio.requests.v1.responses;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

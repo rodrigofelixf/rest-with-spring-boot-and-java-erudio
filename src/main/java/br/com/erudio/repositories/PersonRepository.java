@@ -1,4 +1,4 @@
-package br.com.erudio.repository;
+package br.com.erudio.repositories;
 
 
 import br.com.erudio.model.Person;

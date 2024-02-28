@@ -1,4 +1,4 @@
-package br.com.erudio.requests.v1;
+package br.com.erudio.requests.v1.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
