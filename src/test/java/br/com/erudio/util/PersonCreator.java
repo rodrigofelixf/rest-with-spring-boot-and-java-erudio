@@ -1,6 +1,7 @@
 package br.com.erudio.util;
 
 import br.com.erudio.model.Person;
+import br.com.erudio.requests.v1.requests.PersonRequestBody;
 import br.com.erudio.requests.v1.responses.PersonResponseBody;
 
 public class PersonCreator {
@@ -38,8 +39,8 @@ public class PersonCreator {
 
 
 
-    public static  PersonResponseBody createPersonResponseToBeSaved() {
-        return PersonResponseBody.builder()
+    public static PersonRequestBody createPersonRequestToBeSaved() {
+        return PersonRequestBody.builder()
                 .firstName("Aristofeu")
                 .lastName("Aristofoles")
                 .address("Rua dos Aristofarios")
