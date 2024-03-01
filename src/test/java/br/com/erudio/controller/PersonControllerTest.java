@@ -10,9 +10,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.erudio.util.PersonCreator.createValidPersonResponse;
@@ -29,7 +30,6 @@ class PersonControllerTest {
 
     @BeforeEach
     void setUp(){
-        List<PersonResponseBody> personResponseBodies = new ArrayList<>(List.of(createValidPersonResponse()));
         Mockito.when(personServiceMock.findAll())
                 .thenReturn(List.of(createValidPersonResponse()));
 
@@ -41,10 +41,12 @@ class PersonControllerTest {
 
         Mockito.when(personServiceMock.update(ArgumentMatchers.any(PersonResponseBody.class)))
                 .thenReturn(createValidPersonResponse());
+
+        Mockito.doNothing().when(personServiceMock).delete(ArgumentMatchers.anyLong());
     }
 
     @Test
-    @DisplayName("return a list of person when successful")
+    @DisplayName("Return a list of person when successful")
     void findAll_ReturnListOfPerson_WhenSuccessful() {
         String expectedFirstName = createValidPersonResponse().getFirstName();
         List<PersonResponseBody> personList = personController.findAll().getBody();
@@ -70,7 +72,7 @@ class PersonControllerTest {
     }
 
     @Test
-    @DisplayName("create save person when successful")
+    @DisplayName("Create save person when successful")
     void create_ReturnPerson_WhenSuccessful() {
         PersonResponseBody personSaved = personController.create(PersonCreator.createPersonRequestToBeSaved()).getBody();
 
@@ -80,20 +82,35 @@ class PersonControllerTest {
 
 
     @Test
-    @DisplayName("update person when successful")
+    @DisplayName("Update person when successful")
     void update_Person_WhenSuccessful() {
         PersonResponseBody personToUpdate = PersonCreator.createValidUpdatePersonResponse();
-        Mockito.when(personServiceMock.update(ArgumentMatchers.any(PersonResponseBody.class)))
-                .thenReturn(personToUpdate);
+
+        Assertions.assertThatCode(() -> personController.update(personToUpdate))
+                .doesNotThrowAnyException();
+
+        ResponseEntity<PersonResponseBody> personUpdatedEntity = personController.update(personToUpdate);
+
+        Mockito.verify(personServiceMock, Mockito.times(2)).update(personToUpdate);
+
+        Assertions.assertThat(personUpdatedEntity.getStatusCode()).isNotNull().isEqualTo(HttpStatus.NO_CONTENT);
+
+    }
+
+    @Test
+    @DisplayName("Delete removes person when successful")
+    void delete_RemovePerson_WhenSuccessful() {
 
 
-        PersonResponseBody responseEntity = personController.update(personToUpdate).getBody();
+        Assertions.assertThatCode(() -> personController.delete(1L))
+                .doesNotThrowAnyException();
 
-        Mockito.verify(personServiceMock, Mockito.times(1)).update(personToUpdate);
+        ResponseEntity<Void> personUpdatedEntity = personController.delete(1L);
 
+        Mockito.verify(personServiceMock, Mockito.times(2)).delete(1L);
 
-        Assertions.assertThat(responseEntity).isNotNull();
-        Assertions.assertThat(responseEntity).isNotNull().isEqualTo(personToUpdate);
+        Assertions.assertThat(personUpdatedEntity.getStatusCode()).isNotNull().isEqualTo(HttpStatus.NO_CONTENT);
+
     }
 
 

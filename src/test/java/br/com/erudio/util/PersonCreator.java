@@ -48,6 +48,15 @@ public class PersonCreator {
                 .build();
     }
 
+    public static PersonResponseBody createPersonResponseToBeSaved() {
+        return PersonResponseBody.builder()
+                .firstName("Aristofeu")
+                .lastName("Aristofoles")
+                .address("Rua dos Aristofarios")
+                .gender("male")
+                .build();
+    }
+
     public static  PersonResponseBody createValidPersonResponse() {
         return PersonResponseBody.builder()
                 .key(1L)

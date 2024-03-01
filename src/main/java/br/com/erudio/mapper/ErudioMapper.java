@@ -14,30 +14,31 @@ import java.util.List;
 
 
 @Mapper(componentModel = "spring")
-public interface ErudioMapper {
-    ErudioMapper INSTANCE = Mappers.getMapper(ErudioMapper.class);
 
-    PersonRequestBody toPersonRequestBody(Person person);
+public abstract class ErudioMapper {
+    public static final ErudioMapper INSTANCE = Mappers.getMapper(ErudioMapper.class);
 
-    @Mapping(target = "key", source = "id")
-    PersonResponseBody toPersonResponseBody(Person person);
-
-    Person toPerson(PersonRequestBody personRequestBody);
-
-    Person toPerson(PersonResponseBody personResponseBody);
-
-    List<PersonResponseBody> toPersonResponseBodyList(List<Person> personList);
-
-
-    BookRequestBody toBookRequestBody(Book book);
+    public abstract PersonRequestBody toPersonRequestBody(Person person);
 
     @Mapping(target = "key", source = "id")
-    BookResponseBody toBookResponseBody(Book book);
+    public abstract PersonResponseBody toPersonResponseBody(Person person);
 
-    Book toBook(BookRequestBody bookRequestBody);
+    public abstract Person toPerson(PersonRequestBody personRequestBody);
 
-    Book toBook(BookResponseBody bookResponseBody);
+    public abstract Person toPerson(PersonResponseBody personResponseBody);
 
-    List<BookResponseBody> toBookResponseBodyList(List<Book> bookList);
+    public abstract List<PersonResponseBody> toPersonResponseBodyList(List<Person> personList);
+
+
+    public abstract BookRequestBody toBookRequestBody(Book book);
+
+    @Mapping(target = "key", source = "id")
+    public abstract BookResponseBody toBookResponseBody(Book book);
+
+    public abstract Book toBook(BookRequestBody bookRequestBody);
+
+    public abstract Book toBook(BookResponseBody bookResponseBody);
+
+    public abstract List<BookResponseBody> toBookResponseBodyList(List<Book> bookList);
 
 }
