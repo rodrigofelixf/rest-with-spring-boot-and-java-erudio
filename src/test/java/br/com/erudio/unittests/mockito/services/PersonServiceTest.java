@@ -5,6 +5,7 @@ import br.com.erudio.model.Person;
 import br.com.erudio.repositories.PersonRepository;
 
 import br.com.erudio.requests.v1.responses.PersonResponseBody;
+import br.com.erudio.services.PersonService;
 import br.com.erudio.util.PersonCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

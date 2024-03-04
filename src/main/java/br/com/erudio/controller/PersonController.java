@@ -2,7 +2,7 @@ package br.com.erudio.controller;
 
 import br.com.erudio.requests.v1.responses.PersonResponseBody;
 import br.com.erudio.requests.v1.requests.PersonRequestBody;
-import br.com.erudio.unittests.mockito.services.PersonService;
+import br.com.erudio.services.PersonService;
 import br.com.erudio.util.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -50,6 +50,7 @@ public class PersonController {
         return ResponseEntity.ok(personService.findAll());
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{id}",
             produces = {
                     MediaType.APPLICATION_JSON,
@@ -73,6 +74,7 @@ public class PersonController {
         return ResponseEntity.ok(personService.findById(id));
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080", "https://erudio.com.br"})
     @PostMapping(
             consumes = {
                     MediaType.APPLICATION_JSON,

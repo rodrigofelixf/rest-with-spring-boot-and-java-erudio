@@ -2,7 +2,7 @@ package br.com.erudio.controller;
 
 import br.com.erudio.requests.v1.requests.PersonRequestBody;
 import br.com.erudio.requests.v1.responses.PersonResponseBody;
-import br.com.erudio.unittests.mockito.services.PersonService;
+import br.com.erudio.services.PersonService;
 import br.com.erudio.util.PersonCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

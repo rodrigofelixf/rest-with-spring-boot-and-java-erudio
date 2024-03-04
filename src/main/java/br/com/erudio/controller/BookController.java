@@ -2,7 +2,7 @@ package br.com.erudio.controller;
 
 import br.com.erudio.requests.v1.requests.BookRequestBody;
 import br.com.erudio.requests.v1.responses.BookResponseBody;
-import br.com.erudio.unittests.mockito.services.BookService;
+import br.com.erudio.services.BookService;
 import br.com.erudio.util.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
