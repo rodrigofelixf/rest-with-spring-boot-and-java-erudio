@@ -3,6 +3,7 @@ package br.com.erudio.services;
 import br.com.erudio.exceptions.InvalidJwtAuthenticationException;
 import br.com.erudio.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,9 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
+
 
 
     private Logger logger = Logger.getLogger(UserService.class.getName());

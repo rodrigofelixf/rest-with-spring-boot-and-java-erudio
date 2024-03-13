@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class AccountCredentialsRequest {
-    private String username;
+    private String userName;
     private String password;
 
 }
