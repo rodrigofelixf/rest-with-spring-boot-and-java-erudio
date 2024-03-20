@@ -8,8 +8,6 @@ security:
       expire-length: 3600000
 
 spring:
-  flyway:
-    locations: src/main/resources/db/migration
   datasource:
     url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?createDatabaseIfNotExist=true
     username: root
@@ -18,7 +16,7 @@ spring:
     ring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
 
 logging:

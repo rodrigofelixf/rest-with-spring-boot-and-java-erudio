@@ -5,17 +5,19 @@ import br.com.erudio.exceptions.ResourceNotFoundException;
 import br.com.erudio.mapper.ErudioMapper;
 import br.com.erudio.model.Person;
 import br.com.erudio.repositories.PersonRepository;
-import br.com.erudio.requests.v1.responses.PersonResponseBody;
 import br.com.erudio.requests.v1.requests.PersonRequestBody;
+import br.com.erudio.requests.v1.responses.PersonResponseBody;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Logger;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @Service
@@ -28,12 +30,12 @@ public class PersonService {
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
 
-    public List<PersonResponseBody> findAll() {
-        List<Person> personList = personRepository.findAll();
-        List<PersonResponseBody> personResponseBodyList = ErudioMapper.INSTANCE.toPersonResponseBodyList(personList);
-        personResponseBodyList.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+    public Page<PersonResponseBody> findAll(Pageable pageable) {
+        var personPageList = personRepository.findAll(pageable);
+        var personPageResponseList = personPageList.map(ErudioMapper.INSTANCE::toPersonResponseBody);
+        personPageResponseList.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 
-        return personResponseBodyList;
+        return personPageResponseList;
     }
 
 
@@ -46,7 +48,7 @@ public class PersonService {
         return personResponse;
     }
 
-    @Transactional
+    @jakarta.transaction.Transactional
     public PersonResponseBody create(PersonRequestBody personRequestBody) {
         Person person = ErudioMapper.INSTANCE.toPerson(personRequestBody);
         personRepository.save(person);
@@ -64,6 +66,17 @@ public class PersonService {
         personRepository.save(person);
         PersonResponseBody personResponse = ErudioMapper.INSTANCE.toPersonResponseBody(person);
         personResponse.add(linkTo(methodOn(PersonController.class).findById(personResponse.getKey())).withSelfRel());
+
+        return personResponse;
+    }
+
+    @Transactional
+    public PersonResponseBody disablePerson(Long id) {
+        personRepository.disablePerson(id);
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+        PersonResponseBody personResponse = ErudioMapper.INSTANCE.toPersonResponseBody(person);
+        personResponse.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
 
         return personResponse;
     }

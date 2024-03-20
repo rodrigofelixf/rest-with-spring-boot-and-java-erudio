@@ -35,10 +35,29 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
+    @Operation(summary = "Refresh token for authenticated user and returns a token")
+    @PutMapping(value = "/refresh/{userName}")
+    public ResponseEntity refreshToken(@PathVariable("userName") String username, @RequestHeader("Authorization") String refreshToken) {
+        if (isInvalidRefreshToken(username, refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
+        }
+
+        var token = authService.refreshToken(username, refreshToken);
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
+        }
+
+        return ResponseEntity.ok(token);
+    }
+
     private boolean isInvalidCredentials(AccountCredentialsRequest data) {
         return data == null ||
                 isNullOrBlank(data.getUserName()) ||
                 isNullOrBlank(data.getPassword());
+    }
+
+    private boolean isInvalidRefreshToken(String username, String refreshToken) {
+        return isNullOrBlank(username) || isNullOrBlank(refreshToken);
     }
 
     private boolean isNullOrBlank(String value) {

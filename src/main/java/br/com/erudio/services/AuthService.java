@@ -3,6 +3,7 @@ package br.com.erudio.services;
 import br.com.erudio.exceptions.InvalidJwtAuthenticationException;
 import br.com.erudio.repositories.UserRepository;
 import br.com.erudio.requests.v1.AccountCredentialsRequest;
+import br.com.erudio.requests.v1.TokenResponse;
 import br.com.erudio.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    @SuppressWarnings("rawtypes")
     public ResponseEntity signin(AccountCredentialsRequest data) {
         try {
             var username = data.getUserName();
@@ -44,6 +46,23 @@ public class AuthService {
         } catch (Exception e) {
             throw new BadCredentialsException("Invalid username//password supplied!");
         }
+
+    }
+
+    @SuppressWarnings("rawtypes")
+    public ResponseEntity refreshToken(String username, String refreshToken) {
+
+            var user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found!"));
+
+            var tokenResponse = new TokenResponse();
+
+            if (user != null) {
+                tokenResponse = tokenProvider.refreshToken(refreshToken);
+            } else {
+                throw new UsernameNotFoundException("Username " + username + " not found!");
+            }
+            return ResponseEntity.ok(tokenResponse);
 
     }
 

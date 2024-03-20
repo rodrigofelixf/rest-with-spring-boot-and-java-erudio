@@ -1,5 +1,6 @@
 package br.com.erudio.requests.v1.requests;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,6 @@ public class PersonRequestBody {
 
 
     private String gender;
+
+    private Boolean enabled;
 }
