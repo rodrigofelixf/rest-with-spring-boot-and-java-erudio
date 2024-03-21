@@ -2,6 +2,7 @@ package br.com.erudio.controller;
 
 import br.com.erudio.requests.v1.requests.BookRequestBody;
 import br.com.erudio.requests.v1.responses.BookResponseBody;
+import br.com.erudio.requests.v1.responses.PersonResponseBody;
 import br.com.erudio.services.BookService;
 import br.com.erudio.util.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +49,16 @@ public class BookController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    public ResponseEntity<List<BookResponseBody>> findAll() {
-        return ResponseEntity.ok(bookService.findAll());
+    public ResponseEntity<PagedModel<EntityModel<BookResponseBody>>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+
+        var sortDirection = "desc".equalsIgnoreCase(direction)
+                ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "title"));
+        return ResponseEntity.ok(bookService.findAll(pageable));
     }
 
     @GetMapping(value = "/{id}",

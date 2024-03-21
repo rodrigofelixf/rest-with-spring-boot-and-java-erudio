@@ -8,12 +8,15 @@ import br.com.erudio.repositories.PersonRepository;
 import br.com.erudio.requests.v1.requests.PersonRequestBody;
 import br.com.erudio.requests.v1.responses.PersonResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -26,24 +29,55 @@ public class PersonService {
 
     private final PersonRepository personRepository;
 
+    @Autowired
+    PagedResourcesAssembler<PersonResponseBody> assembler;
+
 
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
 
-    public Page<PersonResponseBody> findAll(Pageable pageable) {
+    public PagedModel<EntityModel<PersonResponseBody>> findAll(Pageable pageable) {
+        logger.info("Finding all people!");
+
         var personPageList = personRepository.findAll(pageable);
         var personPageResponseList = personPageList.map(ErudioMapper.INSTANCE::toPersonResponseBody);
         personPageResponseList.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
 
-        return personPageResponseList;
+        Link link = linkTo(
+                methodOn(PersonController.class)
+                        .findAll(pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                "asc")
+        ).withSelfRel();
+
+        return assembler.toModel(personPageResponseList, link);
+    }
+
+    public PagedModel<EntityModel<PersonResponseBody>> findPersonByName(String firstName, Pageable pageable) {
+        logger.info("Finding all people!");
+
+        var personPageList = personRepository.findPersonByName(firstName, pageable);
+        var personPageResponseList = personPageList.map(ErudioMapper.INSTANCE::toPersonResponseBody);
+        personPageResponseList.forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
+
+        Link link = linkTo(
+                methodOn(PersonController.class)
+                        .findAll(pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                "asc")
+        ).withSelfRel();
+
+        return assembler.toModel(personPageResponseList, link);
     }
 
 
     public PersonResponseBody findById(Long id) {
+
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
         PersonResponseBody personResponse = ErudioMapper.INSTANCE.toPersonResponseBody(person);
         personResponse.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+
 
         return personResponse;
     }
@@ -82,7 +116,7 @@ public class PersonService {
     }
 
     public void delete(Long id) {
-        Person person= personRepository.findById(id)
+        Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
         personRepository.delete(person);
 
