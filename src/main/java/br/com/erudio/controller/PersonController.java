@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/person/v1")
 @Tag(name = "People", description = "EndPoints for Managing People")
 public class PersonController {
