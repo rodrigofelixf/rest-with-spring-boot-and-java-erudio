@@ -1,6 +1,11 @@
 server:
   error:
     include-stacktrace: on_param
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000
 
 spring:
   datasource:
@@ -8,14 +13,21 @@ spring:
     username: root
     password: root
   jpa:
+    ring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
-
 
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
+        flywaydb: DEBUG
+springdoc:
+  pathsToMatch:
+    - /auth/**
+    - /api/**/v1/**
+  swagger-ui:
+    use-root-path: true
