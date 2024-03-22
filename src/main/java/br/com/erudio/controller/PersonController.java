@@ -30,6 +30,10 @@ public class PersonController {
 
     private final PersonService personService;
 
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
     @GetMapping(produces = {MediaType.APPLICATION_JSON,
             MediaType.APPLICATION_XML,
             MediaType.APPLICATION_YML
