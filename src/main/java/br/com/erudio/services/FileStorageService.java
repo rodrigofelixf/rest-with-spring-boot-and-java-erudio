@@ -3,7 +3,11 @@ package br.com.erudio.services;
 
 import br.com.erudio.config.FileStorageConfig;
 import br.com.erudio.exceptions.FileStorageException;
+import br.com.erudio.exceptions.MyFileNotFoundException;
+import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +25,9 @@ public class FileStorageService {
 
     @Autowired
     public FileStorageService(FileStorageConfig fileStorageConfig) {
-        Path path = Paths.get(fileStorageConfig.getUploadDir())
-                .toAbsolutePath().normalize();
 
-        this.fileStorageLocation = path;
+        this.fileStorageLocation = Paths.get(fileStorageConfig.getUploadDir())
+                .toAbsolutePath().normalize();
 
         try {
             Files.createDirectories(fileStorageLocation);
@@ -52,7 +55,19 @@ public class FileStorageService {
             );
         }
 
+    }
 
+    public Resource loadFileAsResource(String filename) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            }
+            throw new MyFileNotFoundException("File not Found");
+        } catch (Exception exception) {
+            throw new MyFileNotFoundException("File not Found " + filename, exception);
+        }
     }
 
 
