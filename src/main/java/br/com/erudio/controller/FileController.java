@@ -50,10 +50,9 @@ public class FileController {
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         logger.info("Storing files to disk");
 
-        return Arrays.asList(files)
-                .stream()
+        return Arrays.stream(files)
                 .map(this::uploadFile)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/downloadFile/{filename:.+}")
