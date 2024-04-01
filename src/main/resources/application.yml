@@ -2,7 +2,7 @@ server:
   error:
     include-stacktrace: on_param
 file:
-  upload-dir: /home/felix/uploadDir
+  upload-dir: /home/runner/work/rest-with-spring-boot-and-java-erudio/uploadDir
 security:
   jwt:
     token:
