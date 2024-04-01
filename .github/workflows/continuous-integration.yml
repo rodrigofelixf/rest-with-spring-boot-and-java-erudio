@@ -29,9 +29,11 @@ jobs:
         cache: maven
         
     - name: Build Application JAR
+      working-directory: ./rest-with-spring-boot-and-java-erudio
       run: mvn clean package
 
     - name: Docker Compose Build
+      working-directory: ./
       run: docker compose build
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
